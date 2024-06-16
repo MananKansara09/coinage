@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id               String                @id @default(uuid())
+  email            String                @unique
+  password         String
+  firstName        String?
+  lastName         String?
+  profileImage     String?
+  mobileNumber     String?
+  telegramBotId    String?
+  connectedBrokers userConnectedBroker[]
+  role             role                  @default(USER)
+  sessions         Session[]
+  telegramBot      TelegramBot?          @relation(fields: [telegramBotId], references: [id])
+}
+
+model Broker {
+  id                String                @id @default(uuid())
+  name              String
+  BrokerLogo        String
+  brokerCredentials Json
+  connectedUsers    userConnectedBroker[]
+}
+
+model userConnectedBroker {
+  id       String @id @default(uuid())
+  userId   String
+  brokerId String
+
+  user        user                  @relation(fields: [userId], references: [id])
+  broker      Broker                @relation(fields: [brokerId], references: [id])
+  credentials userBrokerCredential?
+
+  @@unique([userId, brokerId])
+}
+
+model userBrokerCredential {
+  id                    String @id @default(uuid())
+  userConnectedBrokerId String
+  privateKey            String
+  feedToken             String
+  otherDetails          Json // To store additional details in JSON format
+
+  userConnectedBroker userConnectedBroker @relation(fields: [userConnectedBrokerId], references: [id])
+
+  @@unique([userConnectedBrokerId])
+}
+
+model TelegramBot {
+  id      String @id @default(uuid())
+  botName String
+  apiKey  String
+  users   user[]
+}
+
+model Session {
+  id             String   @id @default(uuid())
+  userId         String
+  totalSessions  Int      @default(0)
+  totalRequests  Int      @default(0)
+  visitedPages   String[]
+  additionalInfo Json
+  user           user     @relation(fields: [userId], references: [id])
+}
+
+enum role {
+  ADMIN
+  USER
+}
