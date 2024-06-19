@@ -5,12 +5,13 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Analytics } from "@vercel/analytics/react"
 
-import { Globe } from "@/components/ui/globe";
+
 import "../globals.css";
-import Image from "next/image";
+
 import Link from "next/link";
-import { motion } from "framer-motion";
+
 import dynamic from "next/dynamic";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -472,6 +473,7 @@ export default function AuthLayout({
           </div>
         </div>
         {children}
+        <Analytics />
         <SpeedInsights />
       </body>
     </html>
