@@ -21,9 +21,10 @@ export async function middleware(request: NextRequest) {
     }
   } else if (frontendPath.includes(request.nextUrl.pathname)) {
     console.log(Object.keys(request.cookies));
-    if (Object.keys(request.cookies).length <= 2) {
+    if (Object.keys(request.cookies).length <= 2 && !request.url.includes("/auth")) {
       const domain = request.headers.get("host");
       const redirectUrl = `https://${domain}/auth`;
+      if()
       return NextResponse.redirect(redirectUrl);
     }
     console.log(request.cookies);
