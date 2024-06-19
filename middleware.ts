@@ -4,7 +4,8 @@ import {
   requestBodySchema,
   loginrequestBodySchema,
 } from "@/utils/schema/auth.schema";
-export async function middleware(request: NextRequest) {
+export async function middleware(request: any) {
+  
   if (checkingPath.includes(request.nextUrl.pathname)) {
     const findIndex = checkingPath.findIndex(
       (path) => path === request.nextUrl.pathname
@@ -20,10 +21,15 @@ export async function middleware(request: NextRequest) {
       );
     }
   }
+  else if(frontendPath.includes(request.nextUrl.pathname)){
+    
+  }
+  
   return NextResponse.next();
 }
 const checkingPath = ["/api/auth/signup", "/api/auth/signin"];
+const frontendPath = ["/user","/auth","/admin"]
 const validationSchema = [requestBodySchema, loginrequestBodySchema];
 export const config = {
-  matcher: ["/api/:path*"],
+  matcher: ["/api/:path*","/auth/:path*","/user/:path*","/admin/:path*"],
 };
