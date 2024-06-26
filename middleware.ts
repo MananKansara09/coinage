@@ -20,7 +20,6 @@ export async function middleware(request: NextRequest) {
       );
     }
   } else if (frontendPath.includes(request.nextUrl.pathname)) {
-    console.log(Object.keys(request.cookies));
     if (
       Object.keys(request.cookies).length <= 2 &&
       !request.url.includes("/auth")
