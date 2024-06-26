@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "postinstall": "prisma generate && npx prisma seed",
+    "postinstall": "prisma generate && npx prisma db seed",
     "start": "next start",
     "lint": "next lint"
   },
